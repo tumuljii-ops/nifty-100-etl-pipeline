@@ -1,0 +1,5 @@
+rule_id,rule_name,status,failures
+DQ01,Primary Key Uniqueness,PASS,0
+DQ03,Foreign Key Integrity,FAIL,304
+DQ04,Balance Sheet Equation,PASS,0
+DQ05,OPM Validation,REVIEW,234
