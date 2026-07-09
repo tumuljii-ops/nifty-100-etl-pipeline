@@ -1,11 +1,10 @@
 import sqlite3
+import pandas as pd
 
 conn = sqlite3.connect("db/nifty100.db")
 
-with open("db/schema.sql","r",encoding="utf-8") as f:
-    conn.executescript(f.read())
+df = pd.read_sql("SELECT * FROM financial_ratios LIMIT 1", conn)
 
-conn.commit()
+print(df.columns.tolist())
+
 conn.close()
-
-print("Database Created Successfully")

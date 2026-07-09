@@ -1,19 +1,13 @@
-# db/check_tables.py
-
 import sqlite3
+import pandas as pd
 
 conn = sqlite3.connect("db/nifty100.db")
 
-cursor = conn.cursor()
+df = pd.read_sql(
+    "SELECT * FROM financial_ratios LIMIT 1",
+    conn
+)
 
-cursor.execute("""
-SELECT name
-FROM sqlite_master
-WHERE type='table'
-ORDER BY name
-""")
-
-for table in cursor.fetchall():
-    print(table[0])
+print(df.columns.tolist())
 
 conn.close()

@@ -39,6 +39,16 @@ companies = pd.read_sql(
     conn
 )
 
+market_cap = pd.read_sql(
+    "SELECT * FROM market_cap",
+    conn
+)
+
+sectors = pd.read_sql(
+    "SELECT * FROM sectors",
+    conn
+)
+
 print("Profit & Loss :", profit_loss.shape)
 print("Balance Sheet :", balance_sheet.shape)
 print("Cashflow      :", cashflow.shape)
@@ -69,6 +79,31 @@ df = df.merge(
     how="left",
     suffixes=("", "_company")
 )
+
+# -------------------------------------------------------
+# MERGE MARKET CAP
+# -------------------------------------------------------
+
+df = df.merge(
+    market_cap,
+    on="company_id",
+    how="left",
+    suffixes=("", "_market")
+)
+
+# -------------------------------------------------------
+# MERGE SECTORS
+# -------------------------------------------------------
+
+df = df.merge(
+    sectors,
+    on="company_id",
+    how="left",
+    suffixes=("", "_sector")
+)
+
+print("\nColumns after Market Cap + Sector Merge:\n")
+print(df.columns.tolist())
 
 print("\nMerged Shape :", df.shape)
 
@@ -311,19 +346,64 @@ final_df = df[
         "id",
         "company_id",
         "year",
+
+        # Financials
+        "sales",
+        "operating_profit",
+        "net_profit",
+        "eps",
+
+        # Ratios
         "net_profit_margin_pct",
         "operating_profit_margin_pct",
         "return_on_equity_pct",
         "debt_to_equity",
         "interest_coverage",
         "asset_turnover",
+
+        # Cash Flow
         "free_cash_flow_cr",
         "capex_cr",
+        "cash_from_operations_cr",
+
+        # Existing Values
         "earnings_per_share",
         "book_value_per_share",
         "dividend_payout_ratio_pct",
         "total_debt_cr",
-        "cash_from_operations_cr"
+
+        # CAGR
+        "revenue_cagr_5yr",
+        "pat_cagr_5yr",
+        "eps_cagr_5yr",
+
+        # Flags
+        "revenue_cagr_flag",
+        "pat_cagr_flag",
+        "eps_cagr_flag",
+
+        # Composite Score
+        "composite_quality_score",
+
+        # Company Info
+        "book_value",
+        "face_value",
+        "roce_percentage",
+        "roe_percentage",
+
+        # Market Cap Table
+        "market_cap_crore",
+        "enterprise_value_crore",
+        "pe_ratio",
+        "pb_ratio",
+        "ev_ebitda",
+        "dividend_yield_pct",
+
+        # Sector Table
+        "broad_sector",
+        "sub_sector",
+        "index_weight_pct",
+        "market_cap_category"
     ]
 ]
 
